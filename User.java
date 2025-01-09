@@ -53,6 +53,8 @@
     /** Makes this user follow the given name. If successful, returns true. 
      *  If this user already follows the given name, or if the follows list is full, does nothing and returns false; */
     public boolean addFollowee(String name) {
+        if(this.name==null) return false;
+        if(this.name==name) return false;
         if(this.follows(name)) return false;
         if(follows[follows.length-1]!=null) return false;
         follows[fCount] = name;
@@ -66,7 +68,7 @@
         if(!this.follows(name)) return false;
         else{
             String temp = null;
-            for(int i=follows.length-1;i>=0;i--){
+            for(int i=fCount-1;i>=0;i--){
                 if(follows[i].equals(name)){
                     follows[i] = temp;
                     fCount--;
