@@ -30,7 +30,7 @@ public class Network {
      *  Notice that the method receives a String, and returns a User object. */
     public User getUser(String name) {
         for(int i=0;i<userCount;i++){
-            if(users[i].getName().equals(name)) return users[i];
+            if(users[i].getName().toLowerCase().equals(name.toLowerCase())) return users[i];
         }
         return null;
     }
@@ -40,14 +40,8 @@ public class Network {
     *  If the given name is already a user in this network, does nothing and returns false;
     *  Otherwise, creates a new user with the given name, adds the user to this network, and returns true. */
     public boolean addUser(String name) {
-        if(users[users.length-1]!=null){ 
-            System.out.println("Network is full, no new users may be added");
-            return false;
-        }
-        if(this.getUser(name)!=null){
-            System.out.println("User is already in the network, cannot add again");
-            return false;
-        }
+        if(users[users.length-1]!=null) return false;
+        if(this.getUser(name)!=null) return false;
         users[userCount] = new User(name);
         userCount++;
         return true;
@@ -68,7 +62,7 @@ public class Network {
         User recommendedUser = null;
         int maxMutual = 0;
         for(int i=0;i<userCount;i++){
-            if(users[i].getName().equals(name)) continue;
+            if(users[i].getName().toLowerCase().equals(name.toLowerCase())) continue;
             if(users[i].countMutual(this.getUser(name))>maxMutual){
                 recommendedUser = users[i];
                 maxMutual = users[i].countMutual(this.getUser(name));
@@ -103,7 +97,7 @@ public class Network {
 
     // Returns a textual description of all the users in this network, and who they follow.
     public String toString() {
-        String ans = "Network:" + "\n";
+        String ans = "Network:";
         for (int i=0;i<userCount;i++) {
             ans = ans + (users[i]) + "\n";
         }
