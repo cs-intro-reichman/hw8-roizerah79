@@ -43,23 +43,18 @@
 
     /** If this user follows the given name, returns true; otherwise returns false. */
     public boolean follows(String name) {
-        for(int i=0;i<follows.length;i++){
+        for(int i=0;i<fCount;i++){
             if(follows[i]==null) return false;
-            if(follows[i].equals(name)) return true;
+            if(name==null) return false;
+            if(follows[i].toLowerCase().equals(name.toLowerCase())) return true;
         }
         return false;
     }
     /** Makes this user follow the given name. If successful, returns true. 
      *  If this user already follows the given name, or if the follows list is full, does nothing and returns false; */
     public boolean addFollowee(String name) {
-        if(this.follows(name)){
-            System.out.println("You are already following this user");
-            return false;
-        }
-        if(follows[follows.length-1]!=null){
-            System.out.println("You have reached the maximum amount of follows, user - " + name + " not followed");
-            return false;
-        }
+        if(this.follows(name)) return false;
+        if(follows[follows.length-1]!=null) return false;
         follows[fCount] = name;
         fCount++;
         return true;
@@ -68,15 +63,13 @@
     /** Removes the given name from the follows list of this user. If successful, returns true.
      *  If the name is not in the list, does nothing and returns false. */
     public boolean removeFollowee(String name) {
-        if(!this.follows(name)){
-            System.out.println("You are not following this user");
-            return false;
-        }
+        if(!this.follows(name)) return false;
         else{
             String temp = null;
-            for(int i=follows.length-1;i>0;i--){
+            for(int i=follows.length-1;i>=0;i--){
                 if(follows[i].equals(name)){
                     follows[i] = temp;
+                    fCount--;
                     return true;
                 }
                 else{
@@ -85,8 +78,7 @@
                     temp = temp1;
                 }
             }
-            fCount--;
-            return true;
+            return false;
         }
     }
 
@@ -95,7 +87,7 @@
     public int countMutual(User other) {
         int count = 0;
         if(this==null||other==null) return count;
-        for(int i=0;i<follows.length;i++){
+        for(int i=0;i<fCount;i++){
             if(other.follows(follows[i])) count++;
         }
         return count;
@@ -104,6 +96,7 @@
     /** Checks is this user is a friend of the other user.
      *  (if two users follow each other, they are said to be "friends.") */
     public boolean isFriendOf(User other) {
+        if(this==null||other==null) return false;
         if(this.follows(other.getName())&&other.follows(this.getName())) return true;
         return false;
     }
